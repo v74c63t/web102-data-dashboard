@@ -1,0 +1,8 @@
+.card {
+  background-color: bisque;
+  padding: 3rem 5rem;
+  border-radius: 1rem;
+  display: flex;
+  gap: 1rem;
+  flex-direction: column;
+}
