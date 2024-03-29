@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import axios from 'axios'
 import './List.css'
 
-const List = () => {
+const List = ({setTotalResult}) => {
 
   const [breweries, setBreweries] = useState([])
   const [query, setQuery] = useState('')
@@ -25,11 +25,14 @@ const List = () => {
     {
       if(searchType !== "all") {
         const url = `https://api.openbrewerydb.org/v1/breweries?by_${searchType}=${query.replace(/ /g,"_")}`
-        console.log(`${url}&by_type=${type}&per_page=${size}`)
         if(type !== 'all') {
           axios.get(`${url}&by_type=${type}&per_page=${size}`)
               .then((res) => {
                 setBreweries(res.data)
+              })
+          axios.get(`https://api.openbrewerydb.org/v1/breweries/meta?by_${searchType}=${query.replace(/ /g,"_")}&by_type=${type}`)
+              .then((res) => {
+                setTotalResult(res.data.total)
               })
         }
         else {
@@ -37,12 +40,20 @@ const List = () => {
               .then((res) => {
                 setBreweries(res.data)
               })
+          axios.get(`https://api.openbrewerydb.org/v1/breweries/meta?by_${searchType}=${query.replace(/ /g,"_")}`)
+              .then((res) => {
+                setTotalResult(res.data.total)
+              })
         }
       }
       else {
         axios.get(`https://api.openbrewerydb.org/v1/breweries/search?query=${query.replace(/ /g,"_")}&per_page=${size}`)
           .then((res) => {
             setBreweries(res.data)
+          })
+        axios.get(`https://api.openbrewerydb.org/v1/breweries/search?query=${query.replace(/ /g,"_")}&per_page=200`)
+          .then((res) => {
+            setTotalResult(res.data.length)
           })
       }
     }
@@ -52,11 +63,19 @@ const List = () => {
             .then((res) => {
               setBreweries(res.data)
             })
+        axios.get(`https://api.openbrewerydb.org/v1/breweries/meta?by_type=${type}`)
+            .then((res) => {
+              setTotalResult(res.data.total)
+            })
       }
       else {
         axios.get(`https://api.openbrewerydb.org/v1/breweries?per_page=${size}`)
             .then((res) => {
               setBreweries(res.data)
+            })
+        axios.get(`https://api.openbrewerydb.org/v1/breweries/meta`)
+            .then((res) => {
+              setTotalResult(res.data.total)
             })
       }
     }

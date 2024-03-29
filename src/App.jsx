@@ -7,6 +7,8 @@ import List from './components/List/List'
 
 function App() {
 
+  const [resultTotal, setTotalResult] = useState(0)
+
   return (
     <div>
       <div className='side-bar'>
@@ -15,7 +17,7 @@ function App() {
       </div>
       <div className='page'>
         <Card />
-        <List />
+        <List setTotalResult={setTotalResult} />
       </div>
     </div>
   )
