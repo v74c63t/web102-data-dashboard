@@ -2,7 +2,7 @@ import './Header.css'
 
 const Header = () => {
   return (
-    <div className="header">Dashboard</div>
+    <div className="header">🍺 BrewDash</div>
   )
 }
 
