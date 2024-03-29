@@ -1,8 +1,12 @@
 .card {
   background-color: bisque;
-  padding: 3rem 5rem;
+  padding: 3rem;
   border-radius: 1rem;
   display: flex;
-  gap: 1rem;
   flex-direction: column;
+  color: black;
+}
+
+h2, p {
+  margin: 0.5rem;
 }
