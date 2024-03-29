@@ -13,7 +13,7 @@ const List = ({setTotalResult, setTotalFilter}) => {
 
   const [filterType, setFilterType] = useState('all')
   const [filterQuery, setFilterQuery] = useState('')
-  const [filterQueryType, setFilterQueryType] = useState('')
+  const [filterQueryType, setFilterQueryType] = useState('all')
 
   useEffect (() => {
     const fetchInitialInfo = () => {
@@ -107,39 +107,45 @@ const List = ({setTotalResult, setTotalFilter}) => {
     {
       if(filterQueryType !== "all") {
         if(filterType !== 'all') {
-          const res = nonFilter.filter((brewery) => brewery[filterQueryType].toLowerCase().includes(filterQuery.toLowerCase()) && brewery.brewery_type === filterType)
+          const res = nonFilter.filter((brewery) => (brewery[filterQueryType]?brewery[filterQueryType]:"").toLowerCase().includes(filterQuery.toLowerCase()) && brewery.brewery_type === filterType)
           setBreweries(res)
           setTotalFilter(res.length)
         }
         else {
-          const res = nonFilter.filter((brewery) => brewery[filterQueryType].toLowerCase().includes(filterQuery.toLowerCase()))
+          const res = nonFilter.filter((brewery) => ((brewery.name?brewery.name:"").toLowerCase().includes(filterQuery.toLowerCase()) || 
+                                                    (brewery.city?brewery.city:"").toLowerCase().includes(filterQuery.toLowerCase()) || 
+                                                    (brewery.state_province?brewery.state_province:"").toLowerCase().includes(filterQuery.toLowerCase()) ||
+                                                    (brewery.country?brewery.country:"").toLowerCase().includes(filterQuery.toLowerCase()) ||
+                                                    (brewery.address_1?brewery.address_1:"").toLowerCase().includes(filterQuery.toLowerCase()) ||
+                                                    (brewery.address_2?brewery.address_2:"").toLowerCase().includes(filterQuery.toLowerCase()) ||
+                                                    (brewery.address_3?brewery.address_3:"").toLowerCase().includes(filterQuery.toLowerCase())) ||
+                                                    brewery.brewery_type.includes(filterQuery.toLowerCase()))
           setBreweries(res)
           setTotalFilter(res.length)
         }
       }
       else {
+        console.log('hi')
         if(filterType !== 'all') {
-          const res = nonFilter.filter((brewery) => (brewery.name.toLowerCase().includes(filterQuery.toLowerCase()) || 
-                                                    brewery.city.toLowerCase().includes(filterQuery.toLowerCase()) || 
-                                                    brewery.state_province.toLowerCase().includes(filterQuery.toLowerCase()) ||
-                                                    brewery.country.toLowerCase().includes(filterQuery.toLowerCase()) ||
-                                                    brewery.address_1.toLowerCase().includes(filterQuery.toLowerCase()) ||
-                                                    brewery.address_2.toLowerCase().includes(filterQuery.toLowerCase()) ||
-                                                    brewery.address_3.toLowerCase().includes(filterQuery.toLowerCase()) ||
-                                                    brewery.website_url.toLowerCase().includes(filterQuery.toLowerCase())) &&
+          const res = nonFilter.filter((brewery) => ((brewery.name?brewery.name:"").toLowerCase().includes(filterQuery.toLowerCase()) || 
+                                                    (brewery.city?brewery.city:"").toLowerCase().includes(filterQuery.toLowerCase()) || 
+                                                    (brewery.state_province?brewery.state_province:"").toLowerCase().includes(filterQuery.toLowerCase()) ||
+                                                    (brewery.country?brewery.country:"").toLowerCase().includes(filterQuery.toLowerCase()) ||
+                                                    (brewery.address_1?brewery.address_1:"").toLowerCase().includes(filterQuery.toLowerCase()) ||
+                                                    (brewery.address_2?brewery.address_2:"").toLowerCase().includes(filterQuery.toLowerCase()) ||
+                                                    (brewery.address_3?brewery.address_3:"").toLowerCase().includes(filterQuery.toLowerCase())) &&
                                                     brewery.brewery_type === filterType)
           setBreweries(res)
           setTotalFilter(res.length)
         }
         else {
-          const res = nonFilter.filter((brewery) => (brewery.name.toLowerCase().includes(filterQuery.toLowerCase()) || 
-                                                    brewery.city.toLowerCase().includes(filterQuery.toLowerCase()) || 
-                                                    brewery.state_province.toLowerCase().includes(filterQuery.toLowerCase()) ||
-                                                    brewery.country.toLowerCase().includes(filterQuery.toLowerCase()) ||
-                                                    brewery.address_1.toLowerCase().includes(filterQuery.toLowerCase()) ||
-                                                    brewery.address_2.toLowerCase().includes(filterQuery.toLowerCase()) ||
-                                                    brewery.address_3.toLowerCase().includes(filterQuery.toLowerCase()) ||
-                                                    brewery.website_url.toLowerCase().includes(filterQuery.toLowerCase()))&&
+          const res = nonFilter.filter((brewery) => ((brewery.name?brewery.name:"").toLowerCase().includes(filterQuery.toLowerCase()) || 
+                                                    (brewery.city?brewery.city:"").toLowerCase().includes(filterQuery.toLowerCase()) || 
+                                                    (brewery.state_province?brewery.state_province:"").toLowerCase().includes(filterQuery.toLowerCase()) ||
+                                                    (brewery.country?brewery.country:"").toLowerCase().includes(filterQuery.toLowerCase()) ||
+                                                    (brewery.address_1?brewery.address_1:"").toLowerCase().includes(filterQuery.toLowerCase()) ||
+                                                    (brewery.address_2?brewery.address_2:"").toLowerCase().includes(filterQuery.toLowerCase()) ||
+                                                    (brewery.address_3?brewery.address_3:"").toLowerCase().includes(filterQuery.toLowerCase())) ||
                                                     brewery.brewery_type.includes(filterQuery.toLowerCase()))
           setBreweries(res)
           setTotalFilter(res.length)
