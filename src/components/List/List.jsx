@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import axios from 'axios'
 import './List.css'
 
-const List = ({setTotalResult, setTotalFilter}) => {
+const List = ({setTotalResult, setTotalFilter, totalResult}) => {
 
   const [breweries, setBreweries] = useState([])
   const [nonFilter, setNonFilter] = useState([])
@@ -125,7 +125,6 @@ const List = ({setTotalResult, setTotalFilter}) => {
         }
       }
       else {
-        console.log('hi')
         if(filterType !== 'all') {
           const res = nonFilter.filter((brewery) => ((brewery.name?brewery.name:"").toLowerCase().includes(filterQuery.toLowerCase()) || 
                                                     (brewery.city?brewery.city:"").toLowerCase().includes(filterQuery.toLowerCase()) || 
@@ -159,6 +158,14 @@ const List = ({setTotalResult, setTotalFilter}) => {
           setTotalFilter(res.length)
       }
     }
+  }
+
+  const handleResetFilter = () => {
+    setBreweries(nonFilter)
+    setTotalFilter(totalResult)
+    setFilterType('all')
+    setFilterQueryType('all')
+    setFilterQuery('')
   }
 
   return (
@@ -199,7 +206,7 @@ const List = ({setTotalResult, setTotalFilter}) => {
             </>
           ) : ""
         }
-        <button type='submit' onClick={handleSearch}>Search</button>
+        <button type='submit' onClick={handleSearch} className='btn'>Search</button>
       </div>
       <div className='filter'>
         <label htmlFor="filter-search-type">Filter: </label>
@@ -223,7 +230,8 @@ const List = ({setTotalResult, setTotalFilter}) => {
           <option value="proprietor">Proprietor</option>
           <option value="closed">Closed</option>
         </select>
-        <button type='submit' onClick={handleFilter}>Filter</button>
+        <button type='submit' onClick={handleFilter} className='btn'>Filter</button>
+        <button type='submit' onClick={handleResetFilter} className='reset'>Reset</button>
       </div>
       <div className='list'>
         <table>

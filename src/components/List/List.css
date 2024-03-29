@@ -16,7 +16,7 @@
   margin: 1rem;
 }
 
-.search button, .filter button {
+.btn {
   padding: 0.5rem 0.8rem;
   border-color: transparent;
   border-radius: 0.5rem;
@@ -25,8 +25,20 @@
   color: black;
 }
 
-.search button:hover, .filter button:hover {
+.btn:hover {
   background-color: rgb(83, 170, 141);
+}
+
+.reset {
+  padding: 0.5rem 0.8rem;
+  border-color: transparent;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  background-color: rgb(255, 43, 43);
+}
+
+.reset:hover {
+  background-color: rgb(155, 26, 26);
 }
 
 .search input, .search select, .filter input, .filter select {
