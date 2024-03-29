@@ -1,7 +1,7 @@
 .list {
   border-radius: 1rem;
   background-color: cornflowerblue;
-  width: 80rem;
+  width: 85rem;
   height: fit-content;
   display: flex;
   align-items: center;
@@ -30,7 +30,7 @@
   background-color: rgb(83, 170, 141);
 }
 
-.search input {
+.search input, .search select {
   padding: 0.5rem;
 }
 
