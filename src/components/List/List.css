@@ -1,0 +1,12 @@
+.list {
+  border-radius: 1rem;
+  background-color: cornflowerblue;
+}
+
+a{
+  color: white;
+}
+
+a:hover {
+  color: antiquewhite;
+}
