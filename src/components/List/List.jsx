@@ -16,7 +16,7 @@ const List = ({setTotalResult, setTotalFilter, totalResult}) => {
   const [filterQueryType, setFilterQueryType] = useState('all')
 
   useEffect (() => {
-    const fetchInitialInfo = () => {
+    const fetchInitialInfo = async () => {
       axios.get('https://api.openbrewerydb.org/v1/breweries?per_page=25')
             .then((res) => {
               setBreweries(res.data)
@@ -168,6 +168,23 @@ const List = ({setTotalResult, setTotalFilter, totalResult}) => {
     setFilterQuery('')
   }
 
+  const handleResetSearch = () => {
+    setType('all')
+    setSearchType('all')
+    setQuery('')
+    setSize(25)
+    axios.get('https://api.openbrewerydb.org/v1/breweries?per_page=25')
+            .then((res) => {
+              setBreweries(res.data)
+              setNonFilter(res.data)
+            })
+    axios.get(`https://api.openbrewerydb.org/v1/breweries/meta`)
+          .then((res) => {
+            setTotalResult(res.data.total)
+            setTotalFilter(res.data.total)
+          })
+  }
+
   return (
     <div>
       <div className='search'>
@@ -207,6 +224,7 @@ const List = ({setTotalResult, setTotalFilter, totalResult}) => {
           ) : ""
         }
         <button type='submit' onClick={handleSearch} className='btn'>Search</button>
+        <button type='submit' onClick={handleResetSearch} className='reset'>Reset</button>
       </div>
       <div className='filter'>
         <label htmlFor="filter-search-type">Filter: </label>
