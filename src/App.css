@@ -42,7 +42,7 @@
 }
 
 .side-bar {
-  position: absolute;
+  position: fixed;
   display: flex;
   height: 100%;
   width: 18%;
@@ -52,7 +52,16 @@
   flex-direction: column;
   text-align: left;
   align-items: center;
-  /* justify-content: center; */
   background-color: black;
   gap: 1rem;
+}
+
+.page {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 2rem;
+  margin-left: 20rem;
 }

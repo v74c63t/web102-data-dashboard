@@ -8,14 +8,16 @@ import List from './components/List/List'
 function App() {
 
   return (
-    <>
+    <div>
       <div className='side-bar'>
         <Header />
         <NavBar />
       </div>
-      <Card />
-      <List />
-    </>
+      <div className='page'>
+        <Card />
+        <List />
+      </div>
+    </div>
   )
 }
 
