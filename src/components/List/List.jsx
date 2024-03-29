@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import axios from 'axios'
 import './List.css'
 
-const List = ({setTotalResult, setTotalFilter, totalResult}) => {
+const List = ({setTotalResult, setTotalFilter, totalResult, setBasicSearch}) => {
 
   const [breweries, setBreweries] = useState([])
   const [nonFilter, setNonFilter] = useState([])
@@ -32,7 +32,7 @@ const List = ({setTotalResult, setTotalFilter, totalResult}) => {
   }, [])
 
   const handleSearch = () => {
-    if(query !== "")
+    if(query.replace(/ /g,"") !== "")
     {
       if(searchType !== "all") {
         const url = `https://api.openbrewerydb.org/v1/breweries?by_${searchType}=${query.replace(/ /g,"_")}`
@@ -47,6 +47,7 @@ const List = ({setTotalResult, setTotalFilter, totalResult}) => {
                 setTotalResult(res.data.total)
                 setTotalFilter(res.data.total)
               })
+          setBasicSearch(false)
         }
         else {
           axios.get(`${url}&per_page=${size}`)
@@ -59,6 +60,7 @@ const List = ({setTotalResult, setTotalFilter, totalResult}) => {
                 setTotalResult(res.data.total)
                 setTotalFilter(res.data.total)
               })
+          setBasicSearch(false)
         }
       }
       else {
@@ -72,6 +74,7 @@ const List = ({setTotalResult, setTotalFilter, totalResult}) => {
             setTotalResult(res.data.length)
             setTotalFilter(res.data.length)
           })
+        setBasicSearch(true)
       }
     }
     else {
@@ -86,6 +89,7 @@ const List = ({setTotalResult, setTotalFilter, totalResult}) => {
               setTotalResult(res.data.total)
               setTotalFilter(res.data.total)
             })
+        setBasicSearch(false)
       }
       else {
         axios.get(`https://api.openbrewerydb.org/v1/breweries?per_page=${size}`)
@@ -98,12 +102,13 @@ const List = ({setTotalResult, setTotalFilter, totalResult}) => {
               setTotalResult(res.data.total)
               setTotalFilter(res.data.total)
             })
+        setBasicSearch(false)
       }
     }
   }
 
   const handleFilter = () => {
-    if(filterQuery !== "")
+    if(filterQuery.replace(/ /g,"") !== "")
     {
       if(filterQueryType !== "all") {
         if(filterType !== 'all') {
@@ -183,6 +188,7 @@ const List = ({setTotalResult, setTotalFilter, totalResult}) => {
             setTotalResult(res.data.total)
             setTotalFilter(res.data.total)
           })
+    setBasicSearch(false)
   }
 
   return (
