@@ -25,7 +25,7 @@ const List = () => {
     {
       if(searchType !== "all") {
         const url = `https://api.openbrewerydb.org/v1/breweries?by_${searchType}=${query.replace(/ /g,"_")}`
-        console.log(url)
+        console.log(`${url}&by_type=${type}&per_page=${size}`)
         if(type !== 'all') {
           axios.get(`${url}&by_type=${type}&per_page=${size}`)
               .then((res) => {
@@ -91,7 +91,7 @@ const List = () => {
                 <option value="micro">Micro</option>
                 <option value="nano">Nano</option>
                 <option value="regional">Regional</option>
-                <option value="brewpup">Brewpub</option>
+                <option value="brewpub">Brewpub</option>
                 <option value="planning">Planning</option>
                 <option value="contract">Contract</option>
                 <option value="proprietor">Proprietor</option>
