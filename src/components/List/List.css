@@ -1,5 +1,4 @@
 .list {
-  border-radius: 1rem;
   background-color: cornflowerblue;
   width: 85rem;
   height: fit-content;
@@ -42,32 +41,22 @@ a:hover {
   color: antiquewhite;
 }
 
+table, tr, th, td {
+  border: 0.1rem solid white;
+}
+
 table {
   border-collapse: collapse;
   padding: 0.8rem;
-  margin-top: 0.8rem;
-  margin-bottom: 0.8rem;
+  table-layout: fixed;
+  width: 100%;
 }
 
 tr {
-  border-bottom: 0.1rem solid black;
-}​
-
-tr:last-of-type{ 
-  border-bottom: none; 
+  height: 4rem;
 }
 
-/* table {
-  border-radius: 1rem;
-} */
-
-/* th{
-  border: 0.3rem solid black;
-  border-collapse: collapse;
-  border-radius: 1rem;
-} */
-
-th {
-  width: fit-content;
-  padding: 1rem;
+tbody tr td {
+  padding: 0.8rem;
+  word-wrap: break-word;
 }
