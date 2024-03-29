@@ -20,13 +20,13 @@
   padding: 0.5rem 0.8rem;
   border-color: transparent;
   border-radius: 0.5rem;
-  background-color: aquamarine;
+  background-color: #ECD540;
   cursor: pointer;
   color: black;
 }
 
 .btn:hover {
-  background-color: rgb(83, 170, 141);
+  background-color: #ad9c2f;
 }
 
 .reset {
@@ -50,7 +50,7 @@ a{
 }
 
 a:hover {
-  color: antiquewhite;
+  color: rgb(180, 180, 180);
 }
 
 table, tr, th, td {
