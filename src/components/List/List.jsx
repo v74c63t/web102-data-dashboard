@@ -2,19 +2,30 @@ import { useState, useEffect } from 'react'
 import axios from 'axios'
 import './List.css'
 
-const List = ({setTotalResult}) => {
+const List = ({setTotalResult, setTotalFilter}) => {
 
   const [breweries, setBreweries] = useState([])
+  const [nonFilter, setNonFilter] = useState([])
   const [query, setQuery] = useState('')
   const [type, setType] = useState('all')
   const [size, setSize] = useState(25)
   const [searchType, setSearchType] = useState('all')
+
+  const [filterType, setFilterType] = useState('all')
+  const [filterQuery, setFilterQuery] = useState('')
+  const [filterQueryType, setFilterQueryType] = useState('')
 
   useEffect (() => {
     const fetchInitialInfo = () => {
       axios.get('https://api.openbrewerydb.org/v1/breweries?per_page=25')
             .then((res) => {
               setBreweries(res.data)
+              setNonFilter(res.data)
+            })
+      axios.get(`https://api.openbrewerydb.org/v1/breweries/meta`)
+            .then((res) => {
+              setTotalResult(res.data.total)
+              setTotalFilter(res.data.total)
             })
     }
     fetchInitialInfo()
@@ -29,20 +40,24 @@ const List = ({setTotalResult}) => {
           axios.get(`${url}&by_type=${type}&per_page=${size}`)
               .then((res) => {
                 setBreweries(res.data)
+                setNonFilter(res.data)
               })
           axios.get(`https://api.openbrewerydb.org/v1/breweries/meta?by_${searchType}=${query.replace(/ /g,"_")}&by_type=${type}`)
               .then((res) => {
                 setTotalResult(res.data.total)
+                setTotalFilter(res.data.total)
               })
         }
         else {
           axios.get(`${url}&per_page=${size}`)
               .then((res) => {
                 setBreweries(res.data)
+                setNonFilter(res.data)
               })
           axios.get(`https://api.openbrewerydb.org/v1/breweries/meta?by_${searchType}=${query.replace(/ /g,"_")}`)
               .then((res) => {
                 setTotalResult(res.data.total)
+                setTotalFilter(res.data.total)
               })
         }
       }
@@ -50,10 +65,12 @@ const List = ({setTotalResult}) => {
         axios.get(`https://api.openbrewerydb.org/v1/breweries/search?query=${query.replace(/ /g,"_")}&per_page=${size}`)
           .then((res) => {
             setBreweries(res.data)
+            setNonFilter(res.data)
           })
         axios.get(`https://api.openbrewerydb.org/v1/breweries/search?query=${query.replace(/ /g,"_")}&per_page=200`)
           .then((res) => {
             setTotalResult(res.data.length)
+            setTotalFilter(res.data.length)
           })
       }
     }
@@ -62,21 +79,78 @@ const List = ({setTotalResult}) => {
         axios.get(`https://api.openbrewerydb.org/v1/breweries?by_type=${type}&per_page=${size}`)
             .then((res) => {
               setBreweries(res.data)
+              setNonFilter(res.data)
             })
         axios.get(`https://api.openbrewerydb.org/v1/breweries/meta?by_type=${type}`)
             .then((res) => {
               setTotalResult(res.data.total)
+              setTotalFilter(res.data.total)
             })
       }
       else {
         axios.get(`https://api.openbrewerydb.org/v1/breweries?per_page=${size}`)
             .then((res) => {
               setBreweries(res.data)
+              setNonFilter(res.data)
             })
         axios.get(`https://api.openbrewerydb.org/v1/breweries/meta`)
             .then((res) => {
               setTotalResult(res.data.total)
+              setTotalFilter(res.data.total)
             })
+      }
+    }
+  }
+
+  const handleFilter = () => {
+    if(filterQuery !== "")
+    {
+      if(filterQueryType !== "all") {
+        if(filterType !== 'all') {
+          const res = nonFilter.filter((brewery) => brewery[filterQueryType].toLowerCase().includes(filterQuery.toLowerCase()) && brewery.brewery_type === filterType)
+          setBreweries(res)
+          setTotalFilter(res.length)
+        }
+        else {
+          const res = nonFilter.filter((brewery) => brewery[filterQueryType].toLowerCase().includes(filterQuery.toLowerCase()))
+          setBreweries(res)
+          setTotalFilter(res.length)
+        }
+      }
+      else {
+        if(filterType !== 'all') {
+          const res = nonFilter.filter((brewery) => (brewery.name.toLowerCase().includes(filterQuery.toLowerCase()) || 
+                                                    brewery.city.toLowerCase().includes(filterQuery.toLowerCase()) || 
+                                                    brewery.state_province.toLowerCase().includes(filterQuery.toLowerCase()) ||
+                                                    brewery.country.toLowerCase().includes(filterQuery.toLowerCase()) ||
+                                                    brewery.address_1.toLowerCase().includes(filterQuery.toLowerCase()) ||
+                                                    brewery.address_2.toLowerCase().includes(filterQuery.toLowerCase()) ||
+                                                    brewery.address_3.toLowerCase().includes(filterQuery.toLowerCase()) ||
+                                                    brewery.website_url.toLowerCase().includes(filterQuery.toLowerCase())) &&
+                                                    brewery.brewery_type === filterType)
+          setBreweries(res)
+          setTotalFilter(res.length)
+        }
+        else {
+          const res = nonFilter.filter((brewery) => (brewery.name.toLowerCase().includes(filterQuery.toLowerCase()) || 
+                                                    brewery.city.toLowerCase().includes(filterQuery.toLowerCase()) || 
+                                                    brewery.state_province.toLowerCase().includes(filterQuery.toLowerCase()) ||
+                                                    brewery.country.toLowerCase().includes(filterQuery.toLowerCase()) ||
+                                                    brewery.address_1.toLowerCase().includes(filterQuery.toLowerCase()) ||
+                                                    brewery.address_2.toLowerCase().includes(filterQuery.toLowerCase()) ||
+                                                    brewery.address_3.toLowerCase().includes(filterQuery.toLowerCase()) ||
+                                                    brewery.website_url.toLowerCase().includes(filterQuery.toLowerCase()))&&
+                                                    brewery.brewery_type.includes(filterQuery.toLowerCase()))
+          setBreweries(res)
+          setTotalFilter(res.length)
+        }
+      }
+    }
+    else {
+      if(filterType !== 'all') {
+        const res = nonFilter.filter((brewery) => brewery.brewery_type === filterType)
+          setBreweries(res)
+          setTotalFilter(res.length)
       }
     }
   }
@@ -120,6 +194,30 @@ const List = ({setTotalResult}) => {
           ) : ""
         }
         <button type='submit' onClick={handleSearch}>Search</button>
+      </div>
+      <div className='filter'>
+        <label htmlFor="filter-search-type">Filter: </label>
+        <select name="filter-search-type" id="filter-search-type" value={filterQueryType} onChange={e => setFilterQueryType(e.target.value)}>
+          <option value="all">All</option>
+          <option value="name">Name</option>
+          <option value="city">City</option>
+          <option value="state_province">State</option>
+          <option value="country">Country</option>
+        </select>
+        <input type='text' placeholder='Filter' value={filterQuery} onChange={(event) => setFilterQuery(event.target.value)} />
+        <label htmlFor="filter-type">Select Type: </label>
+        <select name="filter-type" id="filter-type" value={filterType} onChange={e => setFilterType(e.target.value)}>
+          <option value="all">All</option>
+          <option value="micro">Micro</option>
+          <option value="nano">Nano</option>
+          <option value="regional">Regional</option>
+          <option value="brewpub">Brewpub</option>
+          <option value="planning">Planning</option>
+          <option value="contract">Contract</option>
+          <option value="proprietor">Proprietor</option>
+          <option value="closed">Closed</option>
+        </select>
+        <button type='submit' onClick={handleFilter}>Filter</button>
       </div>
       <div className='list'>
         <table>

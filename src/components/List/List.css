@@ -8,7 +8,7 @@
   flex-direction: column;
 }
 
-.search {
+.search, .filter {
   display: flex;
   gap: 1rem;
   align-items: center;
@@ -16,7 +16,7 @@
   margin: 1rem;
 }
 
-.search button {
+.search button, .filter button {
   padding: 0.5rem 0.8rem;
   border-color: transparent;
   border-radius: 0.5rem;
@@ -25,11 +25,11 @@
   color: black;
 }
 
-.search button:hover {
+.search button:hover, .filter button:hover {
   background-color: rgb(83, 170, 141);
 }
 
-.search input, .search select {
+.search input, .search select, .filter input, .filter select {
   padding: 0.5rem;
 }
 
@@ -48,8 +48,8 @@ table, tr, th, td {
 table {
   border-collapse: collapse;
   padding: 0.8rem;
-  table-layout: fixed;
   width: 100%;
+  table-layout: fixed;
 }
 
 tr {
