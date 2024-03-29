@@ -1,6 +1,37 @@
 .list {
   border-radius: 1rem;
   background-color: cornflowerblue;
+  width: 80rem;
+  height: fit-content;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.search {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: center;
+  margin: 1rem;
+}
+
+.search button {
+  padding: 0.5rem 0.8rem;
+  border-color: transparent;
+  border-radius: 0.5rem;
+  background-color: aquamarine;
+  cursor: pointer;
+  color: black;
+}
+
+.search button:hover {
+  background-color: rgb(83, 170, 141);
+}
+
+.search input {
+  padding: 0.5rem;
 }
 
 a{
@@ -9,4 +40,34 @@ a{
 
 a:hover {
   color: antiquewhite;
+}
+
+table {
+  border-collapse: collapse;
+  padding: 0.8rem;
+  margin-top: 0.8rem;
+  margin-bottom: 0.8rem;
+}
+
+tr {
+  border-bottom: 0.1rem solid black;
+}​
+
+tr:last-of-type{ 
+  border-bottom: none; 
+}
+
+/* table {
+  border-radius: 1rem;
+} */
+
+/* th{
+  border: 0.3rem solid black;
+  border-collapse: collapse;
+  border-radius: 1rem;
+} */
+
+th {
+  width: fit-content;
+  padding: 1rem;
 }
