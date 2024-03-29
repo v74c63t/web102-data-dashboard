@@ -65,7 +65,7 @@ const List = () => {
   return (
     <div>
       <div className='search'>
-        <label for="search-type">Search: </label>
+        <label htmlFor="search-type">Search: </label>
         <select name="search-type" id="search-type" value={searchType} onChange={e => setSearchType(e.target.value)}>
           <option value="all">All</option>
           <option value="name">Name</option>
@@ -74,7 +74,7 @@ const List = () => {
           <option value="country">Country</option>
         </select>
         <input type='text' placeholder='Search' value={query} onChange={(event) => setQuery(event.target.value)} />
-        <label for="size">Select Page Size: </label>
+        <label htmlFor="size">Select Page Size: </label>
         <select name="size" id="size" value={size} onChange={e => setSize(e.target.value)}>
           <option value={10}>10</option>
           <option value={25}>25</option>
@@ -85,7 +85,7 @@ const List = () => {
           searchType !== "all" ?
           (
             <>
-              <label for="type">Select Type: </label>
+              <label htmlFor="type">Select Type: </label>
               <select name="type" id="type" value={type} onChange={e => setType(e.target.value)}>
                 <option value="all">All</option>
                 <option value="micro">Micro</option>
@@ -120,14 +120,14 @@ const List = () => {
             {breweries.map((brewery, i) => {
               return (
                 <tr key={i}>
-                  <th>{brewery.name}</th>
-                  <th>{brewery.brewery_type.charAt(0).toUpperCase() + brewery.brewery_type.slice(1)}</th>
-                  <th>{`${brewery.address_1!== null ? brewery.address_1: "N/A"}${brewery.address_2 !== null ? ", " + brewery.address_2 : ""}${brewery.address_3 !== null ? ", " + brewery.address_3 : ""}`}</th>
-                  <th>{brewery.city}</th>
-                  <th>{brewery.state_province}</th>
-                  <th>{brewery.country}</th>
-                  <th>{`${brewery.phone!== null ? brewery.phone: "N/A"}`}</th>
-                  <th>{brewery.website_url!== null ? (<a href={brewery.website_url}>{brewery.website_url}</a>): "N/A"}</th>
+                  <td>{brewery.name}</td>
+                  <td>{brewery.brewery_type.charAt(0).toUpperCase() + brewery.brewery_type.slice(1)}</td>
+                  <td>{`${brewery.address_1!== null ? brewery.address_1: "N/A"}${brewery.address_2 !== null ? ", " + brewery.address_2 : ""}${brewery.address_3 !== null ? ", " + brewery.address_3 : ""}`}</td>
+                  <td>{brewery.city}</td>
+                  <td>{brewery.state_province}</td>
+                  <td>{brewery.country}</td>
+                  <td>{`${brewery.phone!== null ? brewery.phone: "N/A"}`}</td>
+                  <td>{brewery.website_url!== null ? (<a href={brewery.website_url}>{brewery.website_url}</a>): "N/A"}</td>
                 </tr>
               )
             })}
