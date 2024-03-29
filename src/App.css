@@ -69,5 +69,8 @@
 .summary {
   display: flex;
   gap: 3rem;
-  flex: 1;
+}
+
+.card {
+  flex-basis: 100%
 }

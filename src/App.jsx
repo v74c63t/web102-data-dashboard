@@ -30,11 +30,11 @@ function App() {
       </div>
       <div className='page'>
         <div className='summary'>
-          <Card data={total} name={"Breweries in Total"} />
-          <Card data={totalResult} name={"Breweries Found in Total from Searching"} />
-          <Card data={totalFilter} name={"Breweries Found in Total from Filtering"} />
+          <Card className='card' data={total} name={"Breweries in Total"} />
+          <Card className='card' data={totalResult} name={"Breweries Found in Total from Searching"} />
+          <Card className='card' data={totalFilter} name={"Breweries Found in Total from Filtering Current Page of Results"} />
         </div>
-        <List setTotalResult={setTotalResult} setTotalFilter={setTotalFilter} />
+        <List setTotalResult={setTotalResult} setTotalFilter={setTotalFilter} totalResult={totalResult} />
       </div>
     </div>
   )
