@@ -2,7 +2,9 @@ import { useState, useEffect } from 'react'
 import axios from 'axios'
 import './List.css'
 
-const List = ({setTotalResult, setTotalFilter, totalResult, setBasicSearch}) => {
+const List = ({setTotalResult, setTotalFilter, totalResult, setPlus, plus}) => {
+
+  const [page, setPage] = useState(1)
 
   const [breweries, setBreweries] = useState([])
   const [nonFilter, setNonFilter] = useState([])
@@ -15,9 +17,11 @@ const List = ({setTotalResult, setTotalFilter, totalResult, setBasicSearch}) => 
   const [filterQuery, setFilterQuery] = useState('')
   const [filterQueryType, setFilterQueryType] = useState('all')
 
+  const [next, setNext] = useState(false)
+
   useEffect (() => {
     const fetchInitialInfo = async () => {
-      axios.get('https://api.openbrewerydb.org/v1/breweries?per_page=25')
+      axios.get(`https://api.openbrewerydb.org/v1/breweries?page=${page}&per_page=25`)
             .then((res) => {
               setBreweries(res.data)
               setNonFilter(res.data)
@@ -25,7 +29,8 @@ const List = ({setTotalResult, setTotalFilter, totalResult, setBasicSearch}) => 
       axios.get(`https://api.openbrewerydb.org/v1/breweries/meta`)
             .then((res) => {
               setTotalResult(res.data.total)
-              setTotalFilter(res.data.total)
+              setTotalFilter(25)
+              setNext(true)
             })
     }
     fetchInitialInfo()
@@ -37,7 +42,7 @@ const List = ({setTotalResult, setTotalFilter, totalResult, setBasicSearch}) => 
       if(searchType !== "all") {
         const url = `https://api.openbrewerydb.org/v1/breweries?by_${searchType}=${query.replace(/ /g,"_")}`
         if(type !== 'all') {
-          axios.get(`${url}&by_type=${type}&per_page=${size}`)
+          axios.get(`${url}&by_type=${type}&page=${page}&per_page=${size}`)
               .then((res) => {
                 setBreweries(res.data)
                 setNonFilter(res.data)
@@ -45,12 +50,13 @@ const List = ({setTotalResult, setTotalFilter, totalResult, setBasicSearch}) => 
           axios.get(`https://api.openbrewerydb.org/v1/breweries/meta?by_${searchType}=${query.replace(/ /g,"_")}&by_type=${type}`)
               .then((res) => {
                 setTotalResult(res.data.total)
-                setTotalFilter(res.data.total)
+                setTotalFilter(Math.min(res.data.total, size))
+                checkNext(res.data.total)
               })
-          setBasicSearch(false)
+          setPlus(false)
         }
         else {
-          axios.get(`${url}&per_page=${size}`)
+          axios.get(`${url}&page=${page}&per_page=${size}`)
               .then((res) => {
                 setBreweries(res.data)
                 setNonFilter(res.data)
@@ -58,28 +64,35 @@ const List = ({setTotalResult, setTotalFilter, totalResult, setBasicSearch}) => 
           axios.get(`https://api.openbrewerydb.org/v1/breweries/meta?by_${searchType}=${query.replace(/ /g,"_")}`)
               .then((res) => {
                 setTotalResult(res.data.total)
-                setTotalFilter(res.data.total)
+                setTotalFilter(Math.min(res.data.total, size))
+                checkNext(res.data.total)
               })
-          setBasicSearch(false)
+          setPlus(false)
         }
       }
       else {
-        axios.get(`https://api.openbrewerydb.org/v1/breweries/search?query=${query.replace(/ /g,"_")}&per_page=${size}`)
+        axios.get(`https://api.openbrewerydb.org/v1/breweries/search?query=${query.replace(/ /g,"_")}&page=${page}&per_page=${size}`)
           .then((res) => {
             setBreweries(res.data)
             setNonFilter(res.data)
           })
-        axios.get(`https://api.openbrewerydb.org/v1/breweries/search?query=${query.replace(/ /g,"_")}&per_page=200`)
+        axios.get(`https://api.openbrewerydb.org/v1/breweries/search?query=${query.replace(/ /g,"_")}&page=${page}&per_page=200`)
           .then((res) => {
-            setTotalResult(res.data.length)
-            setTotalFilter(res.data.length)
+            setTotalResult(Math.min(((page) * 200), (res.data.length + ((page - 1) * 200))))
+            if(res.data.length === 200) {
+              setPlus(true)
+            }
+            else {
+              setPlus(false)
+            }
+            setTotalFilter(Math.min(res.data.length, size))
+            checkNext(res.data.length)
           })
-        setBasicSearch(true)
       }
     }
     else {
       if(type !== 'all') {
-        axios.get(`https://api.openbrewerydb.org/v1/breweries?by_type=${type}&per_page=${size}`)
+        axios.get(`https://api.openbrewerydb.org/v1/breweries?by_type=${type}&page=${page}&per_page=${size}`)
             .then((res) => {
               setBreweries(res.data)
               setNonFilter(res.data)
@@ -87,12 +100,13 @@ const List = ({setTotalResult, setTotalFilter, totalResult, setBasicSearch}) => 
         axios.get(`https://api.openbrewerydb.org/v1/breweries/meta?by_type=${type}`)
             .then((res) => {
               setTotalResult(res.data.total)
-              setTotalFilter(res.data.total)
+              setTotalFilter(Math.min(res.data.total, size))
+              checkNext(res.data.total)
             })
-        setBasicSearch(false)
+        setPlus(false)
       }
       else {
-        axios.get(`https://api.openbrewerydb.org/v1/breweries?per_page=${size}`)
+        axios.get(`https://api.openbrewerydb.org/v1/breweries?&page=${page}per_page=${size}`)
             .then((res) => {
               setBreweries(res.data)
               setNonFilter(res.data)
@@ -100,9 +114,10 @@ const List = ({setTotalResult, setTotalFilter, totalResult, setBasicSearch}) => 
         axios.get(`https://api.openbrewerydb.org/v1/breweries/meta`)
             .then((res) => {
               setTotalResult(res.data.total)
-              setTotalFilter(res.data.total)
+              setTotalFilter(Math.min(res.data.total, size))
+              checkNext(res.data.total)
             })
-        setBasicSearch(false)
+        setPlus(false)
       }
     }
   }
@@ -167,7 +182,7 @@ const List = ({setTotalResult, setTotalFilter, totalResult, setBasicSearch}) => 
 
   const handleResetFilter = () => {
     setBreweries(nonFilter)
-    setTotalFilter(totalResult)
+    setTotalFilter(size)
     setFilterType('all')
     setFilterQueryType('all')
     setFilterQuery('')
@@ -178,7 +193,7 @@ const List = ({setTotalResult, setTotalFilter, totalResult, setBasicSearch}) => 
     setSearchType('all')
     setQuery('')
     setSize(25)
-    axios.get('https://api.openbrewerydb.org/v1/breweries?per_page=25')
+    axios.get(`https://api.openbrewerydb.org/v1/breweries?page=1&per_page=25`)
             .then((res) => {
               setBreweries(res.data)
               setNonFilter(res.data)
@@ -186,9 +201,57 @@ const List = ({setTotalResult, setTotalFilter, totalResult, setBasicSearch}) => 
     axios.get(`https://api.openbrewerydb.org/v1/breweries/meta`)
           .then((res) => {
             setTotalResult(res.data.total)
-            setTotalFilter(res.data.total)
+            setTotalFilter(size)
           })
-    setBasicSearch(false)
+    setPlus(false)
+    setPage(1)
+  }
+
+  const checkNext = (total) => {
+    if(plus) {
+      if(((page + 1) * size) % 200 !== 0) {
+        if((page + 1) * size < total || (total- (page * size) > 0)) {
+          setNext(true)
+          return
+        }
+      }
+      if(query.replace(/ /g,"") !== "") {
+        axios.get(`https://api.openbrewerydb.org/v1/breweries/search?query=${query.replace(/ /g,"_")}&page=${page + 1}&per_page=200`)
+          .then((res) => {
+            if(res.data.length === 0) {
+              setPlus(false)
+              setNext(false)
+              return
+            }
+          })
+        if((page + 1) * size <= total || (total- (page * size) > 0)) {
+          setNext(true)
+          return
+        }
+      }
+    }
+    else {
+      if((page + 1) * size <= total || (total- (page * size) > 0)) {
+        setNext(true)
+        return
+      }
+      else {
+        setNext(false)
+        return
+      }
+    }
+  }
+
+  const handlePrev = () => {
+    setPage(page - 1)
+    handleSearch()
+    handleFilter()
+  }
+
+  const handleNext = () => {
+    setPage(page + 1)
+    handleSearch()
+    handleFilter()
   }
 
   return (
@@ -229,7 +292,7 @@ const List = ({setTotalResult, setTotalFilter, totalResult, setBasicSearch}) => 
             </>
           ) : ""
         }
-        <button type='submit' onClick={handleSearch} className='btn'>Search</button>
+        <button type='submit' onClick={() => {setPage(1); handleSearch()}} className='btn'>Search</button>
         <button type='submit' onClick={handleResetSearch} className='reset'>Reset</button>
       </div>
       <div className='filter'>
@@ -288,6 +351,11 @@ const List = ({setTotalResult, setTotalFilter, totalResult, setBasicSearch}) => 
             })}
           </tbody>
         </table>
+      </div>
+      <div className='pagination'>
+        {page !== 1 ? <button className="btn" onClick={handlePrev}>Prev</button> : <button className="btn disabled" disabled>Prev</button>}
+        <p>Page {page}</p>
+        {next ? <button className="btn" onClick={handleNext}>Next</button> : <button className="btn disabled" disabled>Next</button>}
       </div>
     </div>
   )

@@ -72,3 +72,15 @@ tbody tr td {
   padding: 0.8rem;
   word-wrap: break-word;
 }
+
+.pagination {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.disabled {
+  background-color: #ad9c2f;
+}
