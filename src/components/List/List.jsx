@@ -111,10 +111,11 @@ const List = ({setTotalResult, setTotalFilter, totalResult, setPlus, plus}) => {
         setPlus(false)
       }
       else {
-        axios.get(`https://api.openbrewerydb.org/v1/breweries?&page=${page}per_page=${size}`)
+        axios.get(`https://api.openbrewerydb.org/v1/breweries?page=${page}&per_page=${size}`)
             .then((res) => {
               setBreweries(res.data)
               setNonFilter(res.data)
+              console.log(res.data.length)
             })
         axios.get(`https://api.openbrewerydb.org/v1/breweries/meta`)
             .then((res) => {
