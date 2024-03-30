@@ -11,7 +11,7 @@ function App() {
   const [totalResult, setTotalResult] = useState(0)
   const [total, setTotal] = useState(0)
   const [totalFilter, setTotalFilter] = useState(0)
-  const [basicSearch, setBasicSearch] = useState(false)
+  const [plus, setPlus] = useState(false)
 
   useEffect (() => {
     const fetchTotal = () => {
@@ -32,10 +32,10 @@ function App() {
       <div className='page'>
         <div className='summary'>
           <Card className='card' data={total} name={"Breweries in Total"} />
-          <Card className='card' data={totalResult === 200 && basicSearch ? "200+" : totalResult} name={"Breweries Found in Total from Searching"} />
-          <Card className='card' data={totalFilter === 200 && basicSearch ? "200+" : totalFilter} name={"Breweries Found in Total from Filtering Current Page of Results"} />
+          <Card className='card' data={plus ? `${totalResult}+` : totalResult} name={"Breweries Found in Total from Searching"} />
+          <Card className='card' data={totalFilter} name={"Breweries Found in Total from Filtering Current Page of Results"} />
         </div>
-        <List setTotalResult={setTotalResult} setTotalFilter={setTotalFilter} totalResult={totalResult} setBasicSearch={setBasicSearch} />
+        <List setTotalResult={setTotalResult} setTotalFilter={setTotalFilter} totalResult={totalResult} setPlus={setPlus} plus={plus} />
       </div>
     </div>
   )
