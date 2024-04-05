@@ -45,11 +45,11 @@
   padding: 0.5rem;
 }
 
-a{
+a, .link{
   color: white;
 }
 
-a:hover {
+a:hover, .link:hover {
   color: rgb(180, 180, 180);
 }
 

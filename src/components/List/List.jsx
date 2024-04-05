@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import axios from 'axios'
 import './List.css'
 
@@ -332,12 +333,13 @@ const List = ({setTotalResult, setTotalFilter, totalResult, setPlus, plus}) => {
             <tr>
               <th>Name</th>
               <th>Type</th>
-              <th>Address</th>
+              {/* <th>Address</th> */}
               <th>City</th>
               <th>State</th>
               <th>Country</th>
-              <th>Phone</th>
-              <th>Website</th>
+              <th>Details</th>
+              {/* <th>Phone</th>
+              <th>Website</th> */}
             </tr>
           </thead>
           <tbody>
@@ -346,12 +348,15 @@ const List = ({setTotalResult, setTotalFilter, totalResult, setPlus, plus}) => {
                 <tr key={i}>
                   <td>{brewery.name}</td>
                   <td>{brewery.brewery_type.charAt(0).toUpperCase() + brewery.brewery_type.slice(1)}</td>
-                  <td>{`${brewery.address_1!== null ? brewery.address_1: "N/A"}${brewery.address_2 !== null ? ", " + brewery.address_2 : ""}${brewery.address_3 !== null ? ", " + brewery.address_3 : ""}`}</td>
+                  {/* <td>{`${brewery.address_1!== null ? brewery.address_1: "N/A"}${brewery.address_2 !== null ? ", " + brewery.address_2 : ""}${brewery.address_3 !== null ? ", " + brewery.address_3 : ""}`}</td> */}
                   <td>{brewery.city}</td>
                   <td>{brewery.state_province}</td>
                   <td>{brewery.country}</td>
-                  <td>{`${brewery.phone!== null ? brewery.phone: "N/A"}`}</td>
-                  <td>{brewery.website_url!== null ? (<a href={brewery.website_url}>{brewery.website_url}</a>): "N/A"}</td>
+                  <td>
+                    <Link className='link' to={`/brewery/${brewery.id}`}>Link</Link>
+                  </td>
+                  {/* <td>{`${brewery.phone!== null ? brewery.phone: "N/A"}`}</td>
+                  <td>{brewery.website_url!== null ? (<a href={brewery.website_url}>{brewery.website_url}</a>): "N/A"}</td> */}
                 </tr>
               )
             })}
