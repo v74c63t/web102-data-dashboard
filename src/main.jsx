@@ -5,6 +5,7 @@ import './index.css'
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Link } from "react-router-dom";
 import NavBar from './components/NavBar/NavBar.jsx';
+import DetailView from './routes/DetailView';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
@@ -12,7 +13,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <Routes>
       <Route path="/" element={<NavBar/>}>
         <Route index={true} element={<App />} />
-        {/* <Route index={false} path="/brewery/:id"  element={<DetailView />} /> */}
+        <Route index={false} path="/brewery/:id"  element={<DetailView />} />
         <Route
           path="*"
           element={
