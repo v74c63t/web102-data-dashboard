@@ -2,6 +2,16 @@ import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
 import './List.css'
+import {
+  BarChart,
+  Bar,
+  CartesianGrid,
+  XAxis,
+  YAxis,
+  Tooltip,
+  Label,
+  Legend
+} from "recharts";
 
 const List = ({setTotalResult, setTotalFilter, totalResult, setPlus, plus}) => {
 
@@ -18,6 +28,9 @@ const List = ({setTotalResult, setTotalFilter, totalResult, setPlus, plus}) => {
   const [filterQuery, setFilterQuery] = useState('')
   const [filterQueryType, setFilterQueryType] = useState('all')
 
+  const [typeData, setTypeData] = useState([])
+  const types = ['micro', 'nano', 'regional', 'brewpub', 'planning', 'contract', 'proprietor', 'closed']
+
   // const [next, setNext] = useState(false)
 
   useEffect (() => {
@@ -26,6 +39,7 @@ const List = ({setTotalResult, setTotalFilter, totalResult, setPlus, plus}) => {
             .then((res) => {
               setBreweries(res.data)
               setNonFilter(res.data)
+              getTypeData(res.data)
             })
       axios.get(`https://api.openbrewerydb.org/v1/breweries/meta`)
             .then((res) => {
@@ -37,6 +51,23 @@ const List = ({setTotalResult, setTotalFilter, totalResult, setPlus, plus}) => {
     fetchInitialInfo()
   }, [])
 
+  const getTypeData = (res) => {
+    let temp = []
+    types.forEach((type) => {
+      const count = res.reduce((sum,brewery) => sum+(brewery.brewery_type===type), 0)
+      // if(count !== 0) {
+        const obj = {
+          "name": type,
+          "count": count
+        }
+        temp.push(obj)
+      // }
+    })
+    setTypeData(temp)
+    // console.log(temp)
+    // console.log(typeData)
+  }
+
   const handleSearch = () => {
     if(query.replace(/ /g,"") !== "")
     {
@@ -47,6 +78,7 @@ const List = ({setTotalResult, setTotalFilter, totalResult, setPlus, plus}) => {
               .then((res) => {
                 setBreweries(res.data)
                 setNonFilter(res.data)
+                getTypeData(res.data)
               })
           axios.get(`https://api.openbrewerydb.org/v1/breweries/meta?by_${searchType}=${query.replace(/ /g,"_")}&by_type=${type}`)
               .then((res) => {
@@ -61,6 +93,7 @@ const List = ({setTotalResult, setTotalFilter, totalResult, setPlus, plus}) => {
               .then((res) => {
                 setBreweries(res.data)
                 setNonFilter(res.data)
+                getTypeData(res.data)
               })
           axios.get(`https://api.openbrewerydb.org/v1/breweries/meta?by_${searchType}=${query.replace(/ /g,"_")}`)
               .then((res) => {
@@ -76,6 +109,7 @@ const List = ({setTotalResult, setTotalFilter, totalResult, setPlus, plus}) => {
           .then((res) => {
             setBreweries(res.data)
             setNonFilter(res.data)
+            getTypeData(res.data)
           })
         axios.get(`https://api.openbrewerydb.org/v1/breweries/search?query=${query.replace(/ /g,"_")}&page=${page}&per_page=200`)
           .then((res) => {
@@ -102,6 +136,7 @@ const List = ({setTotalResult, setTotalFilter, totalResult, setPlus, plus}) => {
             .then((res) => {
               setBreweries(res.data)
               setNonFilter(res.data)
+              getTypeData(res.data)
             })
         axios.get(`https://api.openbrewerydb.org/v1/breweries/meta?by_type=${type}`)
             .then((res) => {
@@ -116,7 +151,7 @@ const List = ({setTotalResult, setTotalFilter, totalResult, setPlus, plus}) => {
             .then((res) => {
               setBreweries(res.data)
               setNonFilter(res.data)
-              console.log(res.data.length)
+              getTypeData(res.data)
             })
         axios.get(`https://api.openbrewerydb.org/v1/breweries/meta`)
             .then((res) => {
@@ -205,6 +240,7 @@ const List = ({setTotalResult, setTotalFilter, totalResult, setPlus, plus}) => {
             .then((res) => {
               setBreweries(res.data)
               setNonFilter(res.data)
+              getTypeData(res.data)
             })
     axios.get(`https://api.openbrewerydb.org/v1/breweries/meta`)
           .then((res) => {
@@ -327,47 +363,66 @@ const List = ({setTotalResult, setTotalFilter, totalResult, setPlus, plus}) => {
         <button type='submit' onClick={handleFilter} className='btn'>Filter</button>
         <button type='submit' onClick={handleResetFilter} className='reset'>Reset</button>
       </div>
-      <div className='list'>
-        <table>
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Type</th>
-              {/* <th>Address</th> */}
-              <th>City</th>
-              <th>State</th>
-              <th>Country</th>
-              <th>Details</th>
-              {/* <th>Phone</th>
-              <th>Website</th> */}
-            </tr>
-          </thead>
-          <tbody>
-            {breweries.map((brewery, i) => {
-              return (
-                <tr key={i}>
-                  <td>{brewery.name}</td>
-                  <td>{brewery.brewery_type.charAt(0).toUpperCase() + brewery.brewery_type.slice(1)}</td>
-                  {/* <td>{`${brewery.address_1!== null ? brewery.address_1: "N/A"}${brewery.address_2 !== null ? ", " + brewery.address_2 : ""}${brewery.address_3 !== null ? ", " + brewery.address_3 : ""}`}</td> */}
-                  <td>{brewery.city}</td>
-                  <td>{brewery.state_province}</td>
-                  <td>{brewery.country}</td>
-                  <td>
-                    <Link className='link' to={`/brewery/${brewery.id}`}>Link</Link>
-                  </td>
-                  {/* <td>{`${brewery.phone!== null ? brewery.phone: "N/A"}`}</td>
-                  <td>{brewery.website_url!== null ? (<a href={brewery.website_url}>{brewery.website_url}</a>): "N/A"}</td> */}
-                </tr>
-              )
-            })}
-          </tbody>
-        </table>
+      <div className="bottom">
+        <div className='list'>
+          <table>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Type</th>
+                {/* <th>Address</th> */}
+                <th>City</th>
+                <th>State</th>
+                <th>Country</th>
+                <th>Details</th>
+                {/* <th>Phone</th>
+                <th>Website</th> */}
+              </tr>
+            </thead>
+            <tbody>
+              {breweries.map((brewery, i) => {
+                return (
+                  <tr key={i}>
+                    <td>{brewery.name}</td>
+                    <td>{brewery.brewery_type.charAt(0).toUpperCase() + brewery.brewery_type.slice(1)}</td>
+                    {/* <td>{`${brewery.address_1!== null ? brewery.address_1: "N/A"}${brewery.address_2 !== null ? ", " + brewery.address_2 : ""}${brewery.address_3 !== null ? ", " + brewery.address_3 : ""}`}</td> */}
+                    <td>{brewery.city}</td>
+                    <td>{brewery.state_province}</td>
+                    <td>{brewery.country}</td>
+                    <td>
+                      <Link className='link' to={`/brewery/${brewery.id}`}>Link</Link>
+                    </td>
+                    {/* <td>{`${brewery.phone!== null ? brewery.phone: "N/A"}`}</td>
+                    <td>{brewery.website_url!== null ? (<a href={brewery.website_url}>{brewery.website_url}</a>): "N/A"}</td> */}
+                  </tr>
+                )
+              })}
+            </tbody>
+          </table>
+        </div>
+        {/* <div className='pagination'>
+          {page !== 1 ? <button className="btn" onClick={handlePrev}>Prev</button> : <button className="btn disabled" disabled>Prev</button>}
+          <p>Page {page}</p>
+          {next ? <button className="btn" onClick={handleNext}>Next</button> : <button className="btn disabled" disabled>Next</button>}
+        </div> */}
+        <div className='chart'>
+          <h2>Charts</h2>
+          <BarChart width={690} height={240} data={typeData} margin={{
+                      top: 10,
+                      right: 30,
+                      left: 20,
+                      bottom: 30,
+                    }}>
+            {/* <CartesianGrid strokeDasharray="3 3" /> */}
+            <XAxis dataKey="name">
+              <Label value="Type of Brewery" offset={-10} position={'insideBottom'} fill='black' />
+            </XAxis>
+            <YAxis label={{ value: 'Number of Breweries', angle: -90, offset:'-10', position: 'center', fill: 'black'}} />
+            <Tooltip />
+            <Bar dataKey="count" fill="#82ca9d" />
+          </BarChart>
+        </div>
       </div>
-      {/* <div className='pagination'>
-        {page !== 1 ? <button className="btn" onClick={handlePrev}>Prev</button> : <button className="btn disabled" disabled>Prev</button>}
-        <p>Page {page}</p>
-        {next ? <button className="btn" onClick={handleNext}>Next</button> : <button className="btn disabled" disabled>Next</button>}
-      </div> */}
     </div>
   )
 }
