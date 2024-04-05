@@ -4,12 +4,13 @@ import App from './App.jsx'
 import './index.css'
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Link } from "react-router-dom";
+import NavBar from './components/NavBar/NavBar.jsx';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <BrowserRouter>
     <Routes>
-      <Route path="/">
+      <Route path="/" element={<NavBar/>}>
         <Route index={true} element={<App />} />
         {/* <Route index={false} path="/brewery/:id"  element={<DetailView />} /> */}
         <Route

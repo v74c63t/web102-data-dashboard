@@ -25,10 +25,10 @@ function App() {
 
   return (
     <div>
-      <div className='side-bar'>
+      {/* <div className='side-bar'>
         <Header />
         <NavBar />
-      </div>
+      </div> */}
       <div className='page'>
         <div className='summary'>
           <Card className='card' data={total} name={"Breweries in Total"} />
