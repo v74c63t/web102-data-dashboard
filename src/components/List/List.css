@@ -1,6 +1,6 @@
 .list {
   background-color: #C19A6B;
-  /* width: 85rem; */
+  width: 85rem;
   height: fit-content;
   display: flex;
   align-items: center;
@@ -93,9 +93,11 @@ tbody tr td {
   color: black;
 }
 
-.bottom {
+.charts {
   display: flex;
   flex-direction: row;
-  gap: 1rem;
+  gap: 0.5rem;
   width: 85rem;
+  padding: 1rem;
+  padding-left: 0;
 }
