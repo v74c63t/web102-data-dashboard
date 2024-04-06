@@ -2,16 +2,7 @@ import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
 import './List.css'
-import {
-  BarChart,
-  Bar,
-  CartesianGrid,
-  XAxis,
-  YAxis,
-  Tooltip,
-  Label,
-  Legend
-} from "recharts";
+import Chart from '../Chart/Chart'
 
 const List = ({setTotalResult, setTotalFilter, totalResult, setPlus, plus}) => {
 
@@ -33,6 +24,7 @@ const List = ({setTotalResult, setTotalFilter, totalResult, setPlus, plus}) => {
   const types = ['micro', 'nano', 'regional', 'brewpub', 'planning', 'contract', 'proprietor', 'closed']
 
   const [locationType, setLocationType] = useState('country')
+  const [chartType, setChartType] = useState('bar')
 
   // const [next, setNext] = useState(false)
 
@@ -54,11 +46,11 @@ const List = ({setTotalResult, setTotalFilter, totalResult, setPlus, plus}) => {
     fetchInitialInfo()
   }, [])
 
-  const getLocationData = (res) => {
-    const locations = Array.from(new Set(res.map((brewery) => brewery[locationType])))
+  const getLocationData = (res, type=locationType) => {
+    const locations = Array.from(new Set(res.map((brewery) => brewery[type])))
     let temp = []
     locations.forEach((location) => {
-      const count = res.reduce((sum,brewery) => sum+(brewery[locationType]===location), 0)
+      const count = res.reduce((sum,brewery) => sum+(brewery[type]===location), 0)
         const obj = {
           "name": location,
           "count": count
@@ -72,17 +64,15 @@ const List = ({setTotalResult, setTotalFilter, totalResult, setPlus, plus}) => {
     let temp = []
     types.forEach((type) => {
       const count = res.reduce((sum,brewery) => sum+(brewery.brewery_type===type), 0)
-      // if(count !== 0) {
+      if(count !== 0) {
         const obj = {
           "name": type,
           "count": count
         }
         temp.push(obj)
-      // }
+      }
     })
     setTypeData(temp)
-    // console.log(temp)
-    // console.log(typeData)
   }
 
   const getChartData = (res) => {
@@ -193,6 +183,7 @@ const List = ({setTotalResult, setTotalFilter, totalResult, setPlus, plus}) => {
         if(filterType !== 'all') {
           const res = nonFilter.filter((brewery) => (brewery[filterQueryType]?brewery[filterQueryType]:"").toLowerCase().includes(filterQuery.toLowerCase()) && brewery.brewery_type === filterType)
           setBreweries(res)
+          getChartData(res)
           setTotalFilter(res.length)
         }
         else {
@@ -205,6 +196,7 @@ const List = ({setTotalResult, setTotalFilter, totalResult, setPlus, plus}) => {
                                                     (brewery.address_3?brewery.address_3:"").toLowerCase().includes(filterQuery.toLowerCase())) ||
                                                     brewery.brewery_type.includes(filterQuery.toLowerCase()))
           setBreweries(res)
+          getChartData(res)
           setTotalFilter(res.length)
         }
       }
@@ -219,6 +211,7 @@ const List = ({setTotalResult, setTotalFilter, totalResult, setPlus, plus}) => {
                                                     (brewery.address_3?brewery.address_3:"").toLowerCase().includes(filterQuery.toLowerCase())) &&
                                                     brewery.brewery_type === filterType)
           setBreweries(res)
+          getChartData(res)
           setTotalFilter(res.length)
         }
         else {
@@ -231,6 +224,7 @@ const List = ({setTotalResult, setTotalFilter, totalResult, setPlus, plus}) => {
                                                     (brewery.address_3?brewery.address_3:"").toLowerCase().includes(filterQuery.toLowerCase())) ||
                                                     brewery.brewery_type.includes(filterQuery.toLowerCase()))
           setBreweries(res)
+          getChartData(res)
           setTotalFilter(res.length)
         }
       }
@@ -239,6 +233,7 @@ const List = ({setTotalResult, setTotalFilter, totalResult, setPlus, plus}) => {
       if(filterType !== 'all') {
         const res = nonFilter.filter((brewery) => brewery.brewery_type === filterType)
           setBreweries(res)
+          getChartData(res)
           setTotalFilter(res.length)
       }
     }
@@ -246,6 +241,7 @@ const List = ({setTotalResult, setTotalFilter, totalResult, setPlus, plus}) => {
 
   const handleResetFilter = () => {
     setBreweries(nonFilter)
+    getChartData(nonFilter)
     setTotalFilter(size)
     setFilterType('all')
     setFilterQueryType('all')
@@ -385,42 +381,23 @@ const List = ({setTotalResult, setTotalFilter, totalResult, setPlus, plus}) => {
         <button type='submit' onClick={handleFilter} className='btn'>Filter</button>
         <button type='submit' onClick={handleResetFilter} className='reset'>Reset</button>
       </div>
+      <div className='filter'>
+        <label htmlFor="chart-type">Chart Type: </label>
+        <select name="chart-type" id="chart-type" value={chartType} onChange={e => {setChartType(e.target.value)}}>
+          <option value="bar">Bar</option>
+          <option value="pie">Pie</option>
+        </select>
+        <label htmlFor="location-type">Chart Location Type: </label>
+        <select name="location-type" id="location-type" value={locationType} onChange={e => {setLocationType(e.target.value); getLocationData(breweries, e.target.value)}}>
+          <option value="city">City</option>
+          <option value="state">State</option>
+          <option value="country">Country</option>
+        </select>
+      </div>
       <div className="charts">
-          <div className='chart'>
-            <h3>Number of Breweries by Brewery Type</h3>
-            <BarChart width={690} height={240} data={typeData} margin={{
-                        top: 20,
-                        right: 30,
-                        left: 20,
-                        bottom: 30,
-                      }}>
-              {/* <CartesianGrid strokeDasharray="3 3" /> */}
-              <XAxis dataKey="name">
-                <Label value="Type of Brewery" offset={-10} position={'insideBottom'} fill='black' />
-              </XAxis>
-              <YAxis label={{ value: 'Number of Breweries', angle: -90, offset:'-10', position: 'center', fill: 'black'}} />
-              <Tooltip />
-              <Bar dataKey="count" fill="#82ca9d" />
-            </BarChart>
-          </div>
-          <div className='chart'>
-            <h3>Number of Breweries by {locationType.charAt(0).toUpperCase() + locationType.slice(1)}</h3>
-            <BarChart width={690} height={240} data={locationData} margin={{
-                        top: 10,
-                        right: 30,
-                        left: 20,
-                        bottom: 30,
-                      }}>
-              {/* <CartesianGrid strokeDasharray="3 3" /> */}
-              <XAxis dataKey="name">
-                <Label value={locationType.charAt(0).toUpperCase() + locationType.slice(1)} offset={-10} position={'insideBottom'} fill='black' />
-              </XAxis>
-              <YAxis label={{ value: 'Number of Breweries', angle: -90, offset:'-10', position: 'center', fill: 'black'}} />
-              <Tooltip />
-              <Bar dataKey="count" fill="#82ca9d" />
-            </BarChart>
-          </div>
-        </div>
+          <Chart title={"Brewery Type"} xLabel="Brewery Type" data={typeData} chartType={chartType} />
+          <Chart title={locationType.charAt(0).toUpperCase() + locationType.slice(1)} xLabel={locationType.charAt(0).toUpperCase() + locationType.slice(1)} data={locationData} chartType={chartType} />
+      </div>
       <div className='list'>
         <table>
           <thead>

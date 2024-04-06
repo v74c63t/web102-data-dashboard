@@ -1,0 +1,7 @@
+.chart {
+  background-color: bisque;
+  height: fit-content;
+  border-radius: 1rem;
+  /* padding: 0.4rem; */
+  color: black;
+}
