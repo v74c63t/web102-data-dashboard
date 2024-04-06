@@ -34,7 +34,7 @@ const BreweryDetail = () => {
               <div>Country: {brewery.country}</div>
               <div>{`${brewery.phone!== null ? "Phone: " + brewery.phone: ""}`}</div>
               {brewery.website_url!== null ? (<div>Website: <a href={brewery.website_url}>{brewery.website_url}</a></div>): ""}
-              <div>Location: <a href={`https://maps.google.com/?q=${brewery.latitude},${brewery.longitude}`}>Google Maps</a></div>
+              {brewery.latitude !== null && brewery.longitude !== null ? <div>Location: <a href={`https://maps.google.com/?q=${brewery.latitude},${brewery.longitude}`}>Google Maps</a></div>: ""}
             </div>
           </div>
         )
