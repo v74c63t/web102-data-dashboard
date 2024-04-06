@@ -417,14 +417,14 @@ const List = ({setTotalResult, setTotalFilter, totalResult, setPlus, plus}) => {
             {breweries.map((brewery, i) => {
               return (
                 <tr key={i}>
-                  <td>{brewery.name}</td>
+                  <td><Link className='table-link' to={`/brewery/${brewery.id}`}>{brewery.name}</Link></td>
                   <td>{brewery.brewery_type.charAt(0).toUpperCase() + brewery.brewery_type.slice(1)}</td>
                   {/* <td>{`${brewery.address_1!== null ? brewery.address_1: "N/A"}${brewery.address_2 !== null ? ", " + brewery.address_2 : ""}${brewery.address_3 !== null ? ", " + brewery.address_3 : ""}`}</td> */}
                   <td>{brewery.city}</td>
                   <td>{brewery.state_province}</td>
                   <td>{brewery.country}</td>
                   <td>
-                    <Link className='link' to={`/brewery/${brewery.id}`}>Link</Link>
+                    <Link className='table-link' to={`/brewery/${brewery.id}`}>Link</Link>
                   </td>
                   {/* <td>{`${brewery.phone!== null ? brewery.phone: "N/A"}`}</td>
                   <td>{brewery.website_url!== null ? (<a href={brewery.website_url}>{brewery.website_url}</a>): "N/A"}</td> */}

@@ -53,6 +53,15 @@ a:hover, .link:hover {
   color: rgb(180, 180, 180);
 }
 
+.table-link {
+  color: #a8ffc9;
+  text-decoration: none;
+}
+
+.table-link:hover {
+  color: #82ca9d;
+}
+
 table, tr, th, td {
   border: 0.1rem solid white;
 }
@@ -83,14 +92,6 @@ tbody tr td {
 
 .disabled {
   background-color: #ad9c2f;
-}
-
-.chart {
-  background-color: bisque;
-  height: fit-content;
-  border-radius: 1rem;
-  /* padding: 0.4rem; */
-  color: black;
 }
 
 .charts {
