@@ -2,26 +2,27 @@
 
 Submitted by: **Vanessa Tang**
 
-This web app: **insert description**
+This web app: **displays data about breweries using the [OpenBreweryDB API](https://www.openbrewerydb.org/documentation). The initial list of data displayed on the app is from the `/v1/breweries` endpoint. Users may adjust the page size to change the amount of data displayed on the page. Users may also filter the data that is currently displayed on the page by search, name, city, state, country, and type. The reset button for the filter functionality will remove all filters from the list and display the non-filtered list again. Users can fetch new data from the API if they wish too using the search functionality. They can query for breweries by name, city, state, country, and type. They can also make a broad query that will search for all fields that contain that query. The reset button will return the list of data to be the initial list of data from when the app is first loaded. Users may click on any item on the list which will bring them to a more detailed page for the brewery clicked on. On the detailed page, it will displayed more detailed information about the brewery as well as a Google Maps link to its location if possible. Above this list of breweries, are a couple of charts. The first chart displays the number of breweries on the current page for each brewery type, while the second chart displays the number of breweries on the current page based on a criteria set by the user. Users can see the number of breweries based on city, state, or country. On top of that, users can change the visualization by setting the chart type to be either a bar chart or pie chart. There are also a couple of summary statistics displayed on the top of the page. The first card displays the total amount of breweries available in the API. The second card displays the total amount of breweries found with searching the API using the query provided by the user. The third card displays the total amount of breweries on the current page that fulfill the filters that were set by the user.**
 
-Time spent: **X** hours spent in total
+Time spent: **8** hours spent in total
 
 ## Required Features
 
 The following **required** functionality is completed:
 
--   [ ] **The app includes at least one unique chart developed using the fetched data that tell an interesting story**
--   [ ] **Clicking on an item in the list view displays more details about it**
--   [ ] **Clicking on an item has a direct, unique link to that item's detail view page**
+-   [x] **The app includes at least one unique chart developed using the fetched data that tell an interesting story**
+-   [x] **Clicking on an item in the list view displays more details about it**
+-   [x] **Clicking on an item has a direct, unique link to that item's detail view page**
 
 The following **optional** features are implemented:
 
--   [ ] The site's customized dashboard contains more content that explains what is interesting about the data
--   [ ] The site allows users to toggle between different data visualizations
+-   [x] The site's customized dashboard contains more content that explains what is interesting about the data
+-   [x] The site allows users to toggle between different data visualizations
 
 The following **additional** features are implemented:
 
--   [ ] List anything else that you added to improve the site's functionality!
+-   [x] Different chart types
+-   [x] Can toggle between different data to be graphed
 
 ## Video Walkthrough
 
@@ -41,6 +42,8 @@ GIF created with [Kap](https://getkap.co/)
 ## Notes
 
 Describe any challenges encountered while building the app.
+
+I had a lot of issues dealing with recharts. I am not a big fan of how the charts are formatted. I had a lot of issues with the axis labels and I ultimately gave up on trying to style them because of constant problems with them cutting off, not being centered, and overlapping with the chart itself.
 
 ## License
 
