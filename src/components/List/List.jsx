@@ -389,7 +389,7 @@ const List = ({setTotalResult, setTotalFilter, totalResult, setPlus, plus}) => {
           <div className='chart'>
             <h3>Number of Breweries by Brewery Type</h3>
             <BarChart width={690} height={240} data={typeData} margin={{
-                        top: 10,
+                        top: 20,
                         right: 30,
                         left: 20,
                         bottom: 30,
