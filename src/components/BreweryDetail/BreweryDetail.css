@@ -1,0 +1,11 @@
+.brewery-detail {
+  background-color: bisque;
+  border-radius: 1rem;
+  padding: 2rem;
+  color: black;
+  font-size: 2rem;
+}
+
+a {
+  color: green;
+}
